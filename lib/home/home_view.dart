@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
+import 'package:image_viewer/core/custom_app_bar.dart';
+import 'package:image_viewer/core/gandalf.dart';
 import 'package:image_viewer/home/home_helper.dart';
 
-import 'widgets/custom_title_bar.dart';
 import 'widgets/error_image.dart';
 import 'widgets/floating_buttons.dart';
 import 'widgets/image_viewer.dart';
+import 'widgets/pdf_viewer.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -18,13 +22,13 @@ class _HomeViewState extends State<HomeView> {
   late TransformationController transformationController;
   late Matrix4 defaultMatrix;
   late double currentScale;
-  late bool isFileExist;
+  late FileType fileType;
   late MouseCursor mouseCursor;
   int turns = 0;
 
   @override
   void initState() {
-    isFileExist = checkFileExist();
+    fileType = getFileType(Gandalf.filePath);
     transformationController = TransformationController();
     defaultMatrix = transformationController.value;
     super.initState();
@@ -43,23 +47,27 @@ class _HomeViewState extends State<HomeView> {
         showResetButton() ? SystemMouseCursors.move : MouseCursor.defer;
 
     return Scaffold(
-      appBar: const CustomTitleBar(),
+      appBar: const CustomAppBar(),
       body: WindowBorder(
         color: Colors.transparent,
-        child: isFileExist
-            ? ImageViewer(
-                transformationController,
-                turns,
-                mouseCursor,
-                onInteractionEnd: (e) {
-                  setState(() {
-                    currentScale = transformationController.value.storage.first;
-                  });
-                },
-              )
-            : const ErrorImage(),
+        child: fileType == FileType.invalid
+            ? const ErrorImage()
+            : fileType == FileType.image
+                ? ImageViewer(
+                    File(Gandalf.filePath!),
+                    transformationController,
+                    turns,
+                    mouseCursor,
+                    onInteractionEnd: (e) {
+                      setState(() {
+                        currentScale =
+                            transformationController.value.storage.first;
+                      });
+                    },
+                  )
+                : PdfViewer(File(Gandalf.filePath!)),
       ),
-      floatingActionButton: isFileExist
+      floatingActionButton: isFileTypeImage()
           ? FloatingButtons(
               rotate: () {
                 setState(() {
@@ -96,5 +104,6 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+  bool isFileTypeImage() => fileType == FileType.image;
   bool showResetButton() => currentScale != 1 || turns != 0;
 }

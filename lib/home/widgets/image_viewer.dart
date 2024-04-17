@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_viewer/core/gandalf.dart';
 
 class ImageViewer extends StatelessWidget {
   const ImageViewer(
+    this.imageFile,
     this.transformationController,
     this.turns,
     this.mouseCursor, {
@@ -12,6 +12,7 @@ class ImageViewer extends StatelessWidget {
     super.key,
   });
 
+  final File imageFile;
   final TransformationController transformationController;
   final int turns;
   final MouseCursor mouseCursor;
@@ -31,7 +32,7 @@ class ImageViewer extends StatelessWidget {
         child: MouseRegion(
           cursor: mouseCursor,
           child: Image.file(
-            File(Gandalf.filePath!),
+            imageFile,
             alignment: Alignment.center,
             width: double.infinity,
             height: double.infinity,

@@ -16,6 +16,18 @@
       "args": ["-a", "C:\\Users\\rjbal\\OneDrive\\Documents\\Untitled-3.png"]
     },
     {
+      "name": "image_viewer PDF",
+      "request": "launch",
+      "type": "dart",
+      "args": ["-a", "C:\\Users\\rjbal\\OneDrive\\Documents\\sample.pdf"]
+    },
+    {
+      "name": "image_viewer PDF MultiPage",
+      "request": "launch",
+      "type": "dart",
+      "args": ["-a", "C:\\Users\\rjbal\\OneDrive\\Documents\\sample_multi.pdf"]
+    },
+    {
       "name": "image_viewer (profile mode)",
       "request": "launch",
       "type": "dart",
