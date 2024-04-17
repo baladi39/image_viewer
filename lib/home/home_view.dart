@@ -104,6 +104,6 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  bool isFileTypeImage() => fileType == FileType.image;
+  bool isFileTypeImage() => fileType != FileType.invalid;
   bool showResetButton() => currentScale != 1 || turns != 0;
 }
